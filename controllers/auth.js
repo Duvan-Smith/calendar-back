@@ -1,15 +1,25 @@
 const { response, request } = require("express");
+const { validationResult } = require("express-validator");
 
 const revalidateToken = (req = request, res = response) => {
-  res.json({
+  res.status(200).json({
     ok: true,
     msg: "get",
   });
 };
 
 const loginUser = (req = request, res = response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      ok: false,
+      errors: errors.mapped(),
+    });
+  }
+
   const { email, password } = req.body;
-  res.json({
+
+  res.status(201).json({
     ok: true,
     msg: "login",
     email,
@@ -18,16 +28,17 @@ const loginUser = (req = request, res = response) => {
 };
 
 const createUser = (req = request, res = response) => {
-  const { name, email, password } = req.body;
-
-  if (name.length < 5) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
     return res.status(400).json({
       ok: false,
-      msg: "Tamaño del nombre incorrecto",
+      errors: errors.mapped(),
     });
   }
 
-  res.json({
+  const { name, email, password } = req.body;
+
+  res.status(201).json({
     ok: true,
     msg: "create",
     name,
