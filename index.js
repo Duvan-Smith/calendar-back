@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 
 const app = express();
 
@@ -11,6 +12,6 @@ app.use(express.static("public"));
 //   });
 // });
 
-app.listen(4000, () => {
-  console.log(`Puerto ${4000}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Puerto ${process.env.PORT}`);
 });
