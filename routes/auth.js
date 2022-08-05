@@ -14,7 +14,7 @@ const { validarCampos } = require("../middlewares/validar-campos");
 router.get("/", revalidateToken);
 
 router.post(
-  "/login",
+  "/",
   [
     check("email", "El correo es obligatorio").not().isEmpty(),
     check("email", "El correo es obligatorio").isEmail(),
