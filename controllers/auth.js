@@ -9,15 +9,40 @@ const revalidateToken = (req = request, res = response) => {
   });
 };
 
-const loginUser = (req = request, res = response) => {
+const loginUser = async (req = request, res = response) => {
   const { email, password } = req.body;
 
-  res.status(201).json({
-    ok: true,
-    msg: "login",
-    email,
-    password,
-  });
+  try {
+    let usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      return res.status(400).json({
+        ok: false,
+        msg: "El usuario no existe",
+      });
+    }
+
+    const validPassword = bcrypt.compareSync(password, usuario.password);
+    if (!validPassword) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Contraseña error",
+      });
+    }
+
+    //TODO: Create JWT
+
+    res.status(201).json({
+      ok: true,
+      uid: usuario.id,
+      name: usuario.name,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Hablar con el admin",
+    });
+  }
 };
 
 const createUser = async (req = request, res = response) => {
@@ -46,6 +71,7 @@ const createUser = async (req = request, res = response) => {
       name: usuario.name,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       ok: false,
       msg: "Hablar con el admin",
