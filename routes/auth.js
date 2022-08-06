@@ -10,8 +10,9 @@ const {
   createUser,
 } = require("../controllers/auth");
 const { validarCampos } = require("../middlewares/validar-campos");
+const { validarJWT } = require("../middlewares/validar-jwt");
 
-router.get("/", revalidateToken);
+router.get("/renew", validarJWT, revalidateToken);
 
 router.post(
   "/",

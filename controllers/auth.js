@@ -3,10 +3,14 @@ const bcrypt = require("bcryptjs");
 const Usuario = require("../models/Usuario");
 const { generateJWT } = require("../helpers/jwt");
 
-const revalidateToken = (req = request, res = response) => {
+const revalidateToken = async (req = request, res = response) => {
+  const { uid, name } = req;
+
+  const token = await generateJWT(uid, name);
+
   res.status(200).json({
     ok: true,
-    msg: "get",
+    token,
   });
 };
 
