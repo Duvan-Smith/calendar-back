@@ -31,10 +31,45 @@ const createEvent = async (req = request, res = response) => {
 };
 
 const updateEvent = async (req = request, res = response) => {
-  res.status(200).json({
-    ok: true,
-    msg: "updateEvent",
-  });
+  const eventId = req.params.id;
+  const uid = req.uid;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      res.status(404).json({
+        ok: false,
+        msg: "Id del evento no existente",
+      });
+    }
+
+    if (event.user.toString() !== uid) {
+      res.status(401).json({
+        ok: false,
+        msg: "No tiene permisos para realizar esta accion",
+      });
+    }
+
+    const newEvent = {
+      ...req.body,
+      user: uid,
+    };
+
+    const updateEvent = await Event.findByIdAndUpdate(eventId, newEvent, {
+      new: true,
+    });
+
+    res.status(200).json({
+      ok: true,
+      event: updateEvent,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Hablar con el admin",
+    });
+  }
 };
 
 const deleteEvent = async (req = request, res = response) => {
