@@ -12,9 +12,11 @@ const {
 
 const router = Router();
 
-router.get("/", validarJWT, getEvents);
-router.post("/", validarJWT, createEvent);
-router.put("/:id", validarJWT, updateEvent);
-router.delete("/:id", validarJWT, deleteEvent);
+router.use(validarJWT);
+
+router.get("/", getEvents);
+router.post("/", createEvent);
+router.put("/:id", updateEvent);
+router.delete("/:id", deleteEvent);
 
 module.exports = router;
