@@ -24,7 +24,7 @@ const updateEvent = async (req = request, res = response) => {
 const deleteEvent = async (req = request, res = response) => {
   res.status(200).json({
     ok: true,
-    msg: "updateEvent",
+    msg: "deleteEvent",
   });
 };
 
