@@ -10,6 +10,8 @@ const revalidateToken = async (req = request, res = response) => {
 
   res.status(200).json({
     ok: true,
+    uid,
+    name,
     token,
   });
 };
